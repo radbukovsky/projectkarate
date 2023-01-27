@@ -3,9 +3,9 @@ version: v1
 advancedMode:
   enabled: false
 build:
-  # Image used by CI pipelines in build tasks, recommendation: use the official maven repo if you want to change runtime version: https://hub.docker.com/_/maven
-  image: gradle:jdk11
-  # Environment variables used by CI pipelines in all tasks
+  # recommendation: use the bitnami dotnet repo if you want to change runtime version: https://hub.docker.com/r/bitnami/dotnet-sdk
+  image: bitnami/dotnet-sdk:6.0.302
+  # definitions of environment variables that will be used in all stages of your pipeline
   environmentVariables: []
     #- key: variable1
     #  value: value1
@@ -15,19 +15,16 @@ build:
     #  value: value3
   pipelines:
     release:
-      pipeline: java-gradle-app-release
+      pipeline: dotnet-nuget-app-release
     preview:
-      pipeline: java-gradle-app-preview
+      pipeline: dotnet-nuget-app-preview
     triggers: []
 runtime:
   # Image is used as a base image for your runtime container
-  image: openjdk:11.0.3-jre-slim-stretch
+  image: mcr.microsoft.com/dotnet/aspnet:6.0
   # Port on which the service will be exposed
   port: 80
   endpoints:
     external:
       # Expose service to external endpoint
       enabled: true
-  java:
-    # JVM parameters that is used for extension of run command
-    jvmParameters: -Xmx128m -Xms128m -XX:MaxMetaspaceSize=128m
